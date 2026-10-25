@@ -10,6 +10,9 @@
 <body>
     <header id="top">
         <img src="1ogo.png" alt="Логотип сайта 5uchn34tk1d">
+        <nav>
+            <a href="#calc">Калькулятор</a>
+        </nav>
     </header>
 
     <main id="calc">
@@ -45,8 +48,14 @@
                 <input id="property" name="field-property" type="checkbox" value="100"> Файлы в комплекте — +100 руб.
             </label><br>
         </div>
+        <button id="add-button" type="button">Добавить в заказ</button>
         <p id="error"></p>
         <p id="result"></p>
+
+        <h2>Состав заказа</h2>
+        <ul id="order-list"></ul>
+        <p id="total"></p>
+        <button id="clear-button" type="button">Очистить заказ</button>
     </main>
 
     <footer>
