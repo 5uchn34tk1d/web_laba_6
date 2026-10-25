@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="calc.js" defer></script>
+</head>
+<body>
+    <header id="top">
+        <img src="1ogo.png" alt="Логотип сайта 5uchn34tk1d">
+        <nav>
+            <a href="#calc">Калькулятор</a>
+        </nav>
+    </header>
+
+    <main id="calc">
+        <h1>Калькулятор стоимости заказа</h1>
+        <label>
+            Количество товара:<br>
+            <input id="quantity" name="field-quantity" type="text" placeholder="Введите количество">
+        </label><br>
+        <label>
+            Товар:<br>
+            <select id="product" name="field-product">
+                <option value="50">Ручка — 50 руб.</option>
+                <option value="120">Тетрадь — 120 руб.</option>
+                <option value="300">Папка — 300 руб.</option>
+            </select>
+        </label><br>
+        <br>
+        <button id="calc-button" type="button">Рассчитать</button>
+        <p id="error"></p>
+        <p id="result"></p>
+    </main>
+
+    <footer>
+        <p> (c) 5uchn34tk1d ^_^</p>
+    </footer>
+</body>
+</html>
