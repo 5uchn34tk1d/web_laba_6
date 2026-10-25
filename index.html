@@ -17,26 +17,43 @@
 
     <main id="calc">
         <h1>Калькулятор стоимости заказа</h1>
+        Тип товара:<br>
         <label>
-            Количество товара:<br>
-            <input id="quantity" name="field-quantity" type="text" placeholder="Введите количество">
+            <input type="radio" name="field-type" value="1" checked> Ручка — 50 руб.
         </label><br>
         <label>
-            Товар:<br>
-            <select id="product" name="field-product">
-                <option value="50">Ручка — 50 руб.</option>
-                <option value="120">Тетрадь — 120 руб.</option>
-                <option value="300">Папка — 300 руб.</option>
-            </select>
+            <input type="radio" name="field-type" value="2"> Тетрадь — 120 руб.
+        </label><br>
+        <label>
+            <input type="radio" name="field-type" value="3"> Папка — 300 руб.
         </label><br>
         <br>
-        <button id="calc-button" type="button">Рассчитать</button>
+        <label>
+            Количество товара:<br>
+            <input id="quantity" name="field-quantity" type="text" value="1" placeholder="Введите количество">
+        </label><br>
+        <br>
+        <div id="options-block">
+            <label>
+                Обложка:<br>
+                <select id="option" name="field-option">
+                    <option value="0">Мягкая — +0 руб.</option>
+                    <option value="80">Твёрдая — +80 руб.</option>
+                    <option value="200">Кожаная — +200 руб.</option>
+                </select>
+            </label><br>
+        </div>
+        <div id="property-block">
+            <label>
+                <input id="property" name="field-property" type="checkbox" value="100"> Файлы в комплекте — +100 руб.
+            </label><br>
+        </div>
         <p id="error"></p>
         <p id="result"></p>
     </main>
 
     <footer>
-        <p> (c) 5uchn34tk1d ^_^</p>
+        <p> (c) Саенко М. ^_^</p>
     </footer>
 </body>
 </html>
