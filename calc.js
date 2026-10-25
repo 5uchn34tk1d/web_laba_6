@@ -7,10 +7,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const propertyBlock = document.getElementById("property-block");
     const optionSelect = document.getElementById("option");
     const propertyCheckbox = document.getElementById("property");
+    const addButton = document.getElementById("add-button");
+    const clearButton = document.getElementById("clear-button");
     const errorBlock = document.getElementById("error");
     const resultBlock = document.getElementById("result");
+    const orderList = document.getElementById("order-list");
+    const totalBlock = document.getElementById("total");
     const quantityPattern = /^[1-9][0-9]{0,5}$/;
     const typePrices = [50, 120, 300];
+    const typeNames = ["Ручка", "Тетрадь", "Папка"];
+    const optionNames = ["мягкая обложка", "твёрдая обложка", "кожаная обложка"];
+    const order = [];
+    let currentCost = 0;
 
     function getType() {
         const checked = document.querySelector("input[name='field-type']:checked");
@@ -34,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function calculate() {
         const quantityText = quantityInput.value.trim();
         if (!quantityPattern.test(quantityText)) {
+            currentCost = 0;
             resultBlock.textContent = "";
             errorBlock.textContent = "Ошибка: введите целое число от 1 до 999999, только цифры.";
             return;
@@ -47,8 +56,48 @@ document.addEventListener("DOMContentLoaded", function () {
         if (type === 3 && propertyCheckbox.checked) {
             price = price + parseInt(propertyCheckbox.value, 10);
         }
+        currentCost = price * quantity;
         errorBlock.textContent = "";
-        resultBlock.textContent = "Стоимость заказа: " + (price * quantity) + " руб.";
+        resultBlock.textContent = "Стоимость позиции: " + currentCost + " руб.";
+    }
+
+    function renderOrder() {
+        let total = 0;
+        orderList.textContent = "";
+        order.forEach(function (item) {
+            const li = document.createElement("li");
+            li.textContent = item.text;
+            orderList.appendChild(li);
+            total = total + item.cost;
+        });
+        if (order.length === 0) {
+            totalBlock.textContent = "Заказ пуст.";
+        } else {
+            totalBlock.textContent = "Итого по заказу: " + total + " руб.";
+        }
+    }
+
+    function addItem() {
+        calculate();
+        if (currentCost === 0) {
+            return;
+        }
+        const type = getType();
+        let text = typeNames[type - 1];
+        if (type === 2) {
+            text = text + ", " + optionNames[optionSelect.selectedIndex];
+        }
+        if (type === 3 && propertyCheckbox.checked) {
+            text = text + ", с файлами";
+        }
+        text = text + ": " + quantityInput.value.trim() + " шт. — " + currentCost + " руб.";
+        order.push({text: text, cost: currentCost});
+        renderOrder();
+    }
+
+    function clearOrder() {
+        order.length = 0;
+        renderOrder();
     }
 
     typeRadios.forEach(function (radio) {
@@ -60,7 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
     quantityInput.addEventListener("input", calculate);
     optionSelect.addEventListener("change", calculate);
     propertyCheckbox.addEventListener("change", calculate);
+    addButton.addEventListener("click", addItem);
+    clearButton.addEventListener("click", clearOrder);
 
     updateForm();
     calculate();
+    renderOrder();
 });
