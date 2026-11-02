@@ -47,13 +47,6 @@ h1 {
     margin: 16px 0 8px;
 }
 
-h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    line-height: normal;
-    margin: 24px 0 8px;
-}
-
 a {
     color: #e31313;
 }
@@ -67,7 +60,7 @@ button {
 
 #error,
 #result,
-#total {
+#price {
     margin: 16px 0 0;
 }
 
