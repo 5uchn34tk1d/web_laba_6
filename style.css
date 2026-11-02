@@ -58,9 +58,19 @@ button {
     font-size: 1em;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #000000;
+    padding: 4px 8px;
+    text-align: left;
+}
+
 #error,
-#result,
-#price {
+#result {
     margin: 16px 0 0;
 }
 
