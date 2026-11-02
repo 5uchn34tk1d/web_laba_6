@@ -60,13 +60,19 @@ button {
 
 table {
     border-collapse: collapse;
+    width: 100%;
 }
 
 th,
 td {
-    border: 1px solid #000000;
-    padding: 4px 8px;
-    text-align: left;
+    border: 1px solid #e31313;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #ff8080;
+    color: #ffffff;
 }
 
 #error,
