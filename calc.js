@@ -52,6 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return cost;
     }
 
+    function findRow(name) {
+        return Array.from(orderBody.rows).find(function (row) {
+            return row.dataset.name === name;
+        });
+    }
+
     function addToOrder() {
         const cost = calculate();
         if (cost === 0) {
@@ -65,10 +71,21 @@ document.addEventListener("DOMContentLoaded", function () {
         if (type.id === "type-folder" && propertyCheckbox.checked) {
             name += ", " + propertyCheckbox.dataset.name;
         }
-        const row = orderBody.insertRow();
-        row.insertCell().textContent = name;
-        row.insertCell().textContent = quantityInput.value.trim();
-        row.insertCell().textContent = cost + " руб.";
+        let row = findRow(name);
+        if (row === undefined) {
+            row = orderBody.insertRow();
+            row.dataset.name = name;
+            row.dataset.price = getUnitPrice();
+            row.dataset.quantity = 0;
+            row.insertCell();
+            row.insertCell();
+            row.insertCell();
+        }
+        const quantity = parseInt(row.dataset.quantity, 10) + parseInt(quantityInput.value.trim(), 10);
+        row.dataset.quantity = quantity;
+        row.cells[0].textContent = name;
+        row.cells[1].textContent = quantity;
+        row.cells[2].textContent = (quantity * parseInt(row.dataset.price, 10)) + " руб.";
         total += cost;
         orderTotal.textContent = total + " руб.";
         orderBox.hidden = false;
