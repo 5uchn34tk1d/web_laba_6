@@ -3,21 +3,23 @@
 document.addEventListener("DOMContentLoaded", function () {
     const quantityInput = document.getElementById("quantity");
     const typeRadios = document.querySelectorAll("input[name='field-type']");
-    const optionsBlock = document.getElementById("options-block");
+    const productBlock = document.getElementById("product-block");
     const propertyBlock = document.getElementById("property-block");
-    const optionSelect = document.getElementById("option");
+    const productSelect = document.getElementById("product");
     const propertyCheckbox = document.getElementById("property");
     const addButton = document.getElementById("add-button");
+    const calcButton = document.getElementById("calc-button");
     const clearButton = document.getElementById("clear-button");
     const errorBlock = document.getElementById("error");
+    const priceBlock = document.getElementById("price");
+    const orderBox = document.getElementById("order-box");
+    const orderBody = document.getElementById("order-body");
     const resultBlock = document.getElementById("result");
-    const orderList = document.getElementById("order-list");
-    const totalBlock = document.getElementById("total");
     const quantityPattern = /^[1-9][0-9]{0,5}$/;
-    const typePrices = [50, 120, 300];
-    const typeNames = ["Ручка", "Тетрадь", "Папка"];
-    const optionNames = ["мягкая обложка", "твёрдая обложка", "кожаная обложка"];
+    const productNames = ["Тетрадь", "Папка", "Ежедневник", "Маркер"];
     const order = [];
+    let currentName = "";
+    let currentQuantity = 0;
     let currentCost = 0;
 
     function getType() {
@@ -28,9 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateForm() {
         const type = getType();
         if (type === 2) {
-            optionsBlock.style.display = "block";
+            productBlock.style.display = "block";
         } else {
-            optionsBlock.style.display = "none";
+            productBlock.style.display = "none";
         }
         if (type === 3) {
             propertyBlock.style.display = "block";
@@ -43,37 +45,58 @@ document.addEventListener("DOMContentLoaded", function () {
         const quantityText = quantityInput.value.trim();
         if (!quantityPattern.test(quantityText)) {
             currentCost = 0;
-            resultBlock.textContent = "";
+            priceBlock.textContent = "";
             errorBlock.textContent = "Ошибка: введите целое число от 1 до 999999, только цифры.";
             return;
         }
         const quantity = parseInt(quantityText, 10);
         const type = getType();
-        let price = typePrices[type - 1];
+        let price = 0;
+        if (type === 1) {
+            price = 30;
+            currentName = "Карандаш";
+        }
         if (type === 2) {
-            price = price + parseInt(optionSelect.value, 10);
+            price = parseInt(productSelect.value, 10);
+            currentName = productNames[productSelect.selectedIndex];
         }
-        if (type === 3 && propertyCheckbox.checked) {
-            price = price + parseInt(propertyCheckbox.value, 10);
+        if (type === 3) {
+            price = 50;
+            currentName = "Ручка";
+            if (propertyCheckbox.checked) {
+                price = price + parseInt(propertyCheckbox.value, 10);
+                currentName = "Ручка с гравировкой";
+            }
         }
+        currentQuantity = quantity;
         currentCost = price * quantity;
         errorBlock.textContent = "";
-        resultBlock.textContent = "Стоимость позиции: " + currentCost + " руб.";
+        priceBlock.textContent = "Стоимость позиции: " + currentCost + " руб.";
+    }
+
+    function addCell(row, text) {
+        const cell = document.createElement("td");
+        cell.textContent = text;
+        row.appendChild(cell);
     }
 
     function renderOrder() {
         let total = 0;
-        orderList.textContent = "";
+        orderBody.textContent = "";
         order.forEach(function (item) {
-            const li = document.createElement("li");
-            li.textContent = item.text;
-            orderList.appendChild(li);
+            const row = document.createElement("tr");
+            addCell(row, item.name);
+            addCell(row, item.quantity);
+            addCell(row, item.cost + " руб.");
+            orderBody.appendChild(row);
             total = total + item.cost;
         });
         if (order.length === 0) {
-            totalBlock.textContent = "Заказ пуст.";
+            orderBox.hidden = true;
+            resultBlock.textContent = "Заказ пуст.";
         } else {
-            totalBlock.textContent = "Итого по заказу: " + total + " руб.";
+            orderBox.hidden = false;
+            resultBlock.textContent = "Стоимость заказа: " + total + " руб.";
         }
     }
 
@@ -82,16 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (currentCost === 0) {
             return;
         }
-        const type = getType();
-        let text = typeNames[type - 1];
-        if (type === 2) {
-            text = text + ", " + optionNames[optionSelect.selectedIndex];
-        }
-        if (type === 3 && propertyCheckbox.checked) {
-            text = text + ", с файлами";
-        }
-        text = text + ": " + quantityInput.value.trim() + " шт. — " + currentCost + " руб.";
-        order.push({text: text, cost: currentCost});
+        order.push({name: currentName, quantity: currentQuantity, cost: currentCost});
         renderOrder();
     }
 
@@ -107,9 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
     quantityInput.addEventListener("input", calculate);
-    optionSelect.addEventListener("change", calculate);
+    productSelect.addEventListener("change", calculate);
     propertyCheckbox.addEventListener("change", calculate);
     addButton.addEventListener("click", addItem);
+    calcButton.addEventListener("click", renderOrder);
     clearButton.addEventListener("click", clearOrder);
 
     updateForm();
